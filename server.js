@@ -6,12 +6,14 @@ const app = require('./app.js');
 
 dotenv.config({ path: './config.env' });
 
+// MAKING DB CONNECTION
 const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.PASSWORD);
 mongoose
   .connect(DB, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
+    useUnifiedTopology: true,
   })
   .then(() => {
     console.log('Connection to DB');
