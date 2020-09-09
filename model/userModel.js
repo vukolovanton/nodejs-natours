@@ -19,10 +19,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'A tour must have a password'],
     minlength: 8,
+    select: false,
   },
   passwordConfirm: {
     type: String,
     required: [true, 'Please confirm your password'],
+    select: false,
     validate: {
       validator: function (el) {
         return el === this.password;
@@ -41,6 +43,14 @@ userSchema.pre('save', async function (next) {
   this.passwordConfirm = undefined;
   next();
 });
+
+// Check if given password same as stored
+userSchema.methods.correctPassword = async function (
+  candidatePassword,
+  userPassword
+) {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;
