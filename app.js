@@ -1,5 +1,8 @@
 const express = require('express');
 const morgan = require('morgan');
+const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
 
 const app = express();
 
@@ -10,9 +13,16 @@ const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 
 // MIDDLEWARES
+app.use(helmet());
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
+// Data sanitization against NoSQL query injections
+app.use(mongoSanitize());
+// Data sanitization against XSS
+app.use(xss());
+
 app.use(express.json());
 app.use(express.static(`${__dirname}/public`));
 
