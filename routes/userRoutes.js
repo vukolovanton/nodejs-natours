@@ -7,6 +7,8 @@ const {
   login,
   forgotPassword,
   resetPassword,
+  updatePassword,
+  protect,
 } = require('../controllers/authController');
 const {
   getAllUsers,
@@ -14,10 +16,16 @@ const {
   getUser,
   updateUser,
   deleteUser,
+  updateMe,
+  deleteMe,
 } = require('../controllers/userController');
 
 router.post('/signup', signup);
 router.post('/signup', login);
+
+router.patch('/update-my-password', protect, updatePassword);
+router.patch('/update-me', protect, updateMe);
+router.delete('/delete-me', protect, deleteMe);
 
 router.post('/forgot-password', forgotPassword);
 router.post('/rest-password', resetPassword);
