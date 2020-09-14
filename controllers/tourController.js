@@ -1,6 +1,7 @@
 const Tour = require('../model/tourModel');
 const APIFeatures = require('../utils/apiFeatures');
 const catchAsync = require('../utils/catchAsync');
+const factory = require('./handlerFactory');
 
 exports.aliasTopTours = async (req, res, next) => {
   req.query.limit = '5';
@@ -32,7 +33,7 @@ exports.getAllTours = catchAsync(async (req, res, next) => {
 
 // Get Singlie Tour
 exports.getTour = catchAsync(async (req, res, next) => {
-  const tour = await Tour.findById(req.params.id);
+  const tour = await Tour.findById(req.params.id).populate('reviews');
   res.status(200).json({
     status: 'SUCCESS',
     data: {
@@ -53,26 +54,28 @@ exports.createTour = catchAsync(async (req, res, next) => {
 });
 
 // Update Tour
-exports.updateTour = catchAsync(async (req, res, next) => {
-  const tour = Tour.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
-  res.status(200).json({
-    status: 'SUCCESS',
-    data: {
-      tour,
-    },
-  });
-});
+exports.updateTour = factory.updateOne(Tour);
+// exports.updateTour = catchAsync(async (req, res, next) => {
+//   const tour = Tour.findByIdAndUpdate(req.params.id, req.body, {
+//     new: true,
+//     runValidators: true,
+//   });
+//   res.status(200).json({
+//     status: 'SUCCESS',
+//     data: {
+//       tour,
+//     },
+//   });
+// });
 
 // Delete tour
-exports.deleteTour = catchAsync(async (req, res, next) => {
-  await Tour.findByIdAndDelete(req.params.id);
-  res.status(200).json({
-    status: 'SUCCESS',
-  });
-});
+exports.deleteTour = factory.deleteOne(Tour);
+// exports.deleteTour = catchAsync(async (req, res, next) => {
+//   await Tour.findByIdAndDelete(req.params.id);
+//   res.status(200).json({
+//     status: 'SUCCESS',
+//   });
+// });
 
 exports.getTourStats = catchAsync(async (req, res, next) => {
   const stats = await Tour.aggregate([

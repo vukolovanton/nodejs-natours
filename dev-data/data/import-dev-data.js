@@ -19,12 +19,11 @@ mongoose
     console.log('Connection to DB');
   });
 
-const tour = JSON.parse(
-  fs.readFileSync(`${__dirname}/tours-simple.json`, 'utf-8')
-);
+const tour = JSON.parse(fs.readFileSync(`${__dirname}/tours.json`, 'utf-8'));
 
 const importData = async () => {
   try {
+    console.log('Start import');
     await Tour.create(tour);
     process.exit();
     console.log('DATA LOADED');
