@@ -11,7 +11,7 @@ const tourSchema = new mongoose.Schema(
       unique: true,
       trim: true,
       maxlength: [40, 'A tour name is too long'],
-      validate: validator.isAlpha,
+      // validate: validator.isAlpha,
     },
     slug: {
       type: String,
@@ -105,6 +105,9 @@ const tourSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+
+// This thing somehow optimise querys, but dunno
+tourSchema.index({ price: 1, ratingsAverage: -1 });
 
 // Runs before .save() command and the .create()
 tourSchema.pre('save', function (next) {
