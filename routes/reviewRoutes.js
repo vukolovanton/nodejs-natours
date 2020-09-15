@@ -3,6 +3,7 @@ const express = require('express');
 const { protect, restrictTo } = require('../controllers/authController');
 const {
   getAllReviews,
+  getReview,
   createReview,
   deleteReview,
   updateReview,
@@ -18,6 +19,7 @@ router
 
 router
   .route('/:id')
+  .get(getReview)
   // .post(createReview)
   .patch(updateReview)
   .delete(deleteReview);

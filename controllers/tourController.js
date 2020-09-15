@@ -1,5 +1,4 @@
 const Tour = require('../model/tourModel');
-const APIFeatures = require('../utils/apiFeatures');
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
 
@@ -11,36 +10,36 @@ exports.aliasTopTours = async (req, res, next) => {
 };
 
 //Get All Tours
-exports.getAllTours = catchAsync(async (req, res, next) => {
-  const features = new APIFeatures(Tour.find(), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
-
-  // EXECUTE QUERY
-  const tours = await features.query;
-
-  // SEND RESPONSE
-  res.status(200).json({
-    status: 'SUCCESS',
-    results: tours.length,
-    data: {
-      tours,
-    },
-  });
-});
+exports.getAllTours = factory.getAll(Tour);
+// exports.getAllTours = catchAsync(async (req, res, next) => {
+//   const features = new APIFeatures(Tour.find(), req.query)
+//     .filter()
+//     .sort()
+//     .limitFields()
+//     .paginate();
+//   // EXECUTE QUERY
+//   const tours = await features.query;
+//   // SEND RESPONSE
+//   res.status(200).json({
+//     status: 'SUCCESS',
+//     results: tours.length,
+//     data: {
+//       tours,
+//     },
+//   });
+// });
 
 // Get Singlie Tour
-exports.getTour = catchAsync(async (req, res, next) => {
-  const tour = await Tour.findById(req.params.id).populate('reviews');
-  res.status(200).json({
-    status: 'SUCCESS',
-    data: {
-      tour,
-    },
-  });
-});
+exports.getTour = factory.getOne(Tour, { path: 'reviews' });
+// exports.getTour = catchAsync(async (req, res, next) => {
+//   const tour = await Tour.findById(req.params.id).populate('reviews');
+//   res.status(200).json({
+//     status: 'SUCCESS',
+//     data: {
+//       tour,
+//     },
+//   });
+// });
 
 //Create Tour
 exports.createTour = catchAsync(async (req, res, next) => {
